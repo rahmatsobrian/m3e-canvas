@@ -877,9 +877,18 @@ export default function Page() {
     const top = mobile ? 96 : 84; // keep the floating toolbar clear of the frame
     const bottom = mobile ? 96 : pad;
     if (mobile) {
-      // a phone zooms to the screen's width and starts at its top; the rest scrolls
-      const z = clamp((r.width - pad * 2) / (x1 - x0), MIN_Z, MAX_Z);
-      setView({ x: (r.width - (x1 - x0) * z) / 2 - x0 * z, y: top - y0 * z, z });
+      // a phone fits the whole frame on screen, the same way the desktop does,
+      // so nothing is cropped below the fold until the person zooms in themselves
+      const z = clamp(
+        Math.min((r.width - pad * 2) / (x1 - x0), (r.height - top - bottom) / (y1 - y0)),
+        MIN_Z,
+        MAX_Z,
+      );
+      setView({
+        x: (r.width - (x1 - x0) * z) / 2 - x0 * z,
+        y: top + (r.height - top - bottom - (y1 - y0) * z) / 2 - y0 * z,
+        z,
+      });
       return;
     }
     const z = clamp(
