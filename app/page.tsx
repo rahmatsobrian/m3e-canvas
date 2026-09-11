@@ -100,7 +100,7 @@ import { ShareDialog } from "@/components/ShareMenu";
 import { ColorPanel } from "@/components/ColorPanel";
 import { MotionPanel, ShapePanel, TypePanel } from "@/components/ThemePanel";
 import { ThemeContext, ensureFontLoaded, ensureLangFontLoaded } from "@/lib/theme";
-import { BottomSheet, MobileActionBar, MobileInspector, MobileLang, MobileSettings } from "@/components/Mobile";
+import { BottomSheet, MobileInspector, MobileLang, MobileSettings } from "@/components/Mobile";
 import { ConfirmDialog, IconBtn, Segmented } from "@/components/ui";
 import { Lang, LangContext, SEED_TEXT, getLang, isLang, setGlobalLang, t, translateDefaultFrameName, translateDefaultText } from "@/lib/i18n";
 
@@ -874,8 +874,8 @@ export default function Page() {
     }
     const mobile = mobileRef.current;
     const pad = mobile ? 14 : 40;
-    const top = mobile ? 96 : 84; // keep the floating toolbar clear of the frame
-    const bottom = mobile ? 96 : pad;
+    const top = mobile ? 78 : 84; // keep the floating toolbar clear of the frame
+    const bottom = mobile ? 78 : pad;
     if (mobile) {
       // a phone fits the whole frame on screen, the same way the desktop does,
       // so nothing is cropped below the fold until the person zooms in themselves
@@ -3856,16 +3856,13 @@ export default function Page() {
             onMobilePanel={(panel) => setSheet(sheet === panel ? null : panel)}
             onMobileMore={() => setSheet(sheet === "more" ? null : "more")}
             onPrompt={() => setSheet(sheet === "prompt" ? null : "prompt")}
+            selected={isMobile && !!selected && sheet === null}
+            multiSelected={selectedIds.length > 1}
+            onEdit={() => setSheet(selectedIds.length > 1 ? "multi" : "edit")}
+            onDuplicate={duplicateSelected}
+            onDelete={deleteSelected}
+            onDeselect={clearSelection}
           />
-
-          {isMobile && selected && sheet === null && (
-            <MobileActionBar
-              p={p}
-              onEdit={() => setSheet(selectedIds.length > 1 ? "multi" : "edit")}
-              onDuplicate={duplicateSelected}
-              onDelete={deleteSelected}
-            />
-          )}
 
           <AnimatePresence>
             {isMobile && sheet === "edit" && selected && (

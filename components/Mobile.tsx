@@ -539,12 +539,13 @@ export function MobileActionBar({
     <div
       style={{
         position: "absolute",
-        left: 14,
-        bottom: "calc(84px + var(--bottom-ui, 0px) + env(safe-area-inset-bottom))",
+        top: "calc(60px + env(safe-area-inset-top))",
+        left: "50%",
+        transform: "translateX(-50%)",
         display: "flex",
-        gap: 4,
-        padding: 6,
-        borderRadius: 32,
+        gap: 3,
+        padding: 5,
+        borderRadius: 26,
         background: p.surface,
         boxShadow: "0 6px 18px rgba(0,0,0,0.14)",
         zIndex: 46,
@@ -554,25 +555,25 @@ export function MobileActionBar({
         onClick={onEdit}
         className="m3-press"
         style={{
-          height: 52,
-          padding: "0 20px 0 16px",
-          borderRadius: 26,
+          height: 42,
+          padding: "0 16px 0 13px",
+          borderRadius: 21,
           border: "none",
           background: p.primary,
           color: p.onPrimary,
-          fontSize: 15,
+          fontSize: 13,
           fontWeight: 700,
           cursor: "pointer",
           display: "inline-flex",
           alignItems: "center",
-          gap: 8,
+          gap: 6,
         }}
       >
-        <Icon name="tune" size={22} />
+        <Icon name="tune" size={18} />
         {t("edit", lang)}
       </button>
-      <IconBtn icon="content_copy" p={p} size={52} title={t("duplicate", lang)} onClick={onDuplicate} />
-      <IconBtn icon="delete" p={p} size={52} danger title={t("delete", lang)} onClick={onDelete} />
+      <IconBtn icon="content_copy" p={p} size={42} title={t("duplicate", lang)} onClick={onDuplicate} />
+      <IconBtn icon="delete" p={p} size={42} danger title={t("delete", lang)} onClick={onDelete} />
     </div>
   );
 }

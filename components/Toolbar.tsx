@@ -94,6 +94,12 @@ export function Toolbar({
   onDraftUndo,
   onDraftSave,
   quickUndo,
+  selected,
+  multiSelected,
+  onEdit,
+  onDuplicate,
+  onDelete,
+  onDeselect,
 }: {
   p: Palette;
   mode: Mode;
@@ -140,10 +146,17 @@ export function Toolbar({
   onDraftSave?: () => void;
   /** after a kept draft: the header's undo, shown beside the opener so the previous design stays a tap away */
   quickUndo?: boolean;
+  /** phone: something is selected, so the top pill swaps to edit/duplicate/delete instead of its usual buttons */
+  selected?: boolean;
+  multiSelected?: boolean;
+  onEdit?: () => void;
+  onDuplicate?: () => void;
+  onDelete?: () => void;
+  onDeselect?: () => void;
 }) {
   const lang = useLang();
   if (mobile) {
-    const S = 42;
+    const S = 34;
     return (
       <>
         <div className="m3-mobile-topbar">
@@ -155,6 +168,35 @@ export function Toolbar({
             <IconBtn icon="more_vert" p={p} onClick={onMobileMore} title={t("settings", lang)} size={S} />
           </Pill>
         </div>
+        {selected ? (
+          <div className="m3-mobile-dock" style={{ background: p.surfaceContainerLow }}>
+            <IconBtn icon="close" p={p} onClick={onDeselect} title={t("close", lang)} size={S} />
+            <button
+              onClick={onEdit}
+              className="m3-press"
+              style={{
+                height: 42,
+                padding: "0 16px 0 12px",
+                borderRadius: 21,
+                border: "none",
+                background: p.primary,
+                color: p.onPrimary,
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                flex: "0 0 auto",
+              }}
+            >
+              <Icon name="tune" size={18} />
+              {t("edit", lang)}
+            </button>
+            {!multiSelected && <IconBtn icon="content_copy" p={p} onClick={onDuplicate} title={t("duplicate", lang)} size={S} />}
+            <IconBtn icon="delete" p={p} onClick={onDelete} title={t("delete", lang)} size={S} danger />
+          </div>
+        ) : (
         <div className="m3-mobile-dock" style={{ background: p.surfaceContainerLow }}>
           <IconBtn icon="add_box" p={p} onClick={() => onMobilePanel?.("parts")} title={t("parts", lang)} size={S} />
           <IconBtn icon="layers" p={p} onClick={() => onMobilePanel?.("layers")} title={t("layers", lang)} size={S} />
@@ -163,13 +205,15 @@ export function Toolbar({
             title={t("addFrame", lang)}
             aria-label={t("addFrame", lang)}
             className="m3-press"
-            style={{ width: 52, height: 52, borderRadius: 17, border: "none", background: p.primary, color: p.onPrimary, display: "grid", placeItems: "center", boxShadow: "0 5px 14px rgba(0,0,0,0.18)", flex: "0 0 auto" }}
+            style={{ width: 42, height: 42, borderRadius: 14, border: "none", background: p.primary, color: p.onPrimary, display: "grid", placeItems: "center", boxShadow: "0 5px 14px rgba(0,0,0,0.18)", flex: "0 0 auto" }}
           >
-            <Icon name="add" size={30} />
+            <Icon name="add" size={24} />
           </button>
           <IconBtn icon="palette" p={p} onClick={onSettings} title={t("settings", lang)} size={S} />
+
           <IconBtn icon="auto_awesome" p={p} onClick={onPrompt} title={t("prompt", lang)} size={S} />
         </div>
+        )}
       </>
     );
   }
